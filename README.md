@@ -1,1 +1,3 @@
-# mailgrep
+## MailGrep - Email OSINT
+
+MailGrep is an OSINT web app that provided a domain can enumerates email accounts informations (ip,hostname,country,...) from different public sources (search engines, pgp key servers and shodan) and check them against haveibeenpwned.com API to uncover potential leaks. This is a very intuitive and affective application for the early stages of an OSIT investigation or just to know the visibility of your company's email domain in the Internet.
