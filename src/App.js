@@ -2,6 +2,8 @@ import React, { useState, useEffect }  from 'react';
 import logo from './logo.svg';
 import './App.css';
 import { trackPromise } from 'react-promise-tracker';
+import { usePromiseTracker } from "react-promise-tracker";
+import Loader from 'react-loader-spinner';
 
 function App() {
   const [currentTime, setCurrentTime] = useState(0);
@@ -60,6 +62,13 @@ function App() {
    
     }
   }
+  const LoadingIndicator = props => {
+    const { promiseInProgress } = usePromiseTracker();
+    return (promiseInProgress && 
+        <Loader type="ThreeDots" color="#2BAD60" height="100" width="100" /> 
+    );
+  }
+
   return (
     <div className="App">
       <header className="App-header">
@@ -70,6 +79,7 @@ function App() {
         <p>The current time is {currentTime}.</p>
         <p>The name count is {count}.</p>
         <p>list of emails found: {mail}.</p>
+        <LoadingIndicator/>
       </header>
     </div>
   );
