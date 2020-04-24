@@ -1,13 +1,14 @@
 import React, { useState, useEffect }  from 'react';
 import logo from './logo.svg';
 import './App.css';
+import { trackPromise } from 'react-promise-tracker';
 
 function App() {
   const [currentTime, setCurrentTime] = useState(0);
   const [first, setFirst] = useState("osama");
   const [last, setLast] = useState("murshid");
   const [count, setCount] = useState(0);
-  const [domain, setDomain] = useState("lvs1.com");
+  const [domain, setDomain] = useState("adp.com");
   const [emails, setEmails] = useState([]);
   console.log("dog");
   const ob = {
@@ -38,7 +39,7 @@ function App() {
   }, []);
   
   useEffect(() => {
-    fetch('/api/get_mail', {
+    trackPromise(fetch('/api/get_mail', {
       method:"POST",
       cache: "no-cache",
       headers:{
@@ -46,34 +47,29 @@ function App() {
       },
       body:JSON.stringify(d)
       }
-  ).then(res => res.json()).then(data => {
+    ).then(res => res.json())).then(data => {
       console.log("cat");
       setEmails(data.emails);
     });
   }, []);
-  var mails=[];
+  var mail = []
   for (let i = 0; i < emails.length; i++) {
-    var js = emails[i].json();
-    mails.push(js.email)
+    for (let j = 0; j < emails[i].email.length; j++) {
+      mail.push(emails[i].email[j])
+    
+   
+    }
   }
   return (
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
-          Edit <code>src/App.js</code> and save to reload.
+          MailGrep
         </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
         <p>The current time is {currentTime}.</p>
         <p>The name count is {count}.</p>
-        <p>list of emails {emails}.</p>
+        <p>list of emails found: {mail}.</p>
       </header>
     </div>
   );
