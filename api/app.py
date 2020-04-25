@@ -1,4 +1,5 @@
 import time
+from joblib import Parallel, delayed
 from flask import Flask, request, jsonify, send_from_directory
 #
 from lib.check import *
@@ -44,16 +45,17 @@ def get_email():
     listEmail = []
     report = None
     verbose = 1
+    start =time.time()
     if domain != ('' or None):
 	    listEmail = engine(domain,'all')
-	
+    print(f"engine complete in {time.time()-start}")
     print(json)
     if json:
         #return {'count': calculate(json['first'],json['last'])}
-        #TODO 
+        #TODO
         if listEmail == [] or listEmail == None:
             return {'status': 'No Emails Found.'}
-		
+
         for email in listEmail:
             eres = {}
             ip = tester(email)
@@ -61,7 +63,7 @@ def get_email():
                 ips = []
                 for i in ip:
                     if i not in ips:ips.append(i)
-                
+
                 ####Shodan
                 #semail = 'Email: %s (%s)'%(email,', '.join([x for x in ips]))
                 #plus(semail)
@@ -78,7 +80,7 @@ def get_email():
                 #        if shodanData.has_key('city') and shodanData.has_key('region_code'):
                 #            headers += '%s- City: %s (%s)'%(spaces(1),shodanData.get('city'),shodanData.get('region_code'))
                 #        eres['shodan'] = headers
-                #    else: 
+                #    else:
                 #        eres['shodan'] = ('No information found (on shodan) for this email, searching this ip/ips on internet..')
                 ###
                 ###pwn
@@ -93,7 +95,7 @@ def get_email():
                 #headers  = '%s>> This email was leaked... found %s results'%(spaces(1),len(pwndata['Breaches']))
                 #eres['pwn'] = (headers)
                 ##
-                
+
                 eres['ips']=ips
                 eres['email']=email
             else:
@@ -103,8 +105,8 @@ def get_email():
     else:
         return {'status': "No domain provided."}
     return res
-    
-    
+
+
 def search(module):
         emails = module.search()
         listEmail = []
@@ -123,8 +125,7 @@ def engine(target,engine):
                     ]
     listEmail = []
     if engine == 'all':
-        for e in engine_list:
-            listEmail.append(search(e))
+        listEmail.append(Parallel(n_jobs=2)(delayed(search)(e) for e in engine_list))
     return listEmail
     #else:
      #   for e in engine_list:
