@@ -28,9 +28,7 @@ def get_engine_list(json,target):
                'is_exalead':Exalead(target),
                'is_google':Google(target),
                'is_pgp':PGP(target),
-               'is_shodan':Shodan(target),
-               'is_yahoo':Yahoo(target),
-               'is_pwned':Pwned(target)
+               'is_yahoo':Yahoo(target)
                 }
     for key in json.keys():
         if json[key] == True:

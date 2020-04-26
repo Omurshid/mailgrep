@@ -20,8 +20,6 @@ class Form extends Component {
     is_exalead: false,
     is_google: false,
     is_pgp: false,
-    is_pwned: false,
-    is_shodan: false,
     is_yahoo: false
 };
 on_change_ask = () => {
@@ -60,24 +58,11 @@ on_change_pgp = () => {
   }));
 }
 
-on_change_pwned = () => {
-  this.setState(prevState => ({
-    is_pwned: !prevState.is_pwned,
-  }));
-}
-
-on_change_shodan = () => {
-  this.setState(prevState => ({
-    is_shodan: !prevState.is_shodan,
-  }));
-}
-
 on_change_yahoo = () => {
   this.setState(prevState => ({
     is_yahoo: !prevState.is_yahoo,
   }));
 }
-
 
 on_change_google = () => {
   console.log(this.state)
@@ -216,27 +201,6 @@ on_change_google = () => {
                 </label>
             </div>
 
-                <div className="form-check">
-                  <label className="form-check-label">
-                    <input type="checkbox"
-                      defaultChecked={this.state.is_pwned}
-                      onChange={this.on_change_pwned}
-                      className="form-check-input"
-                    />
-                    Pwned
-                  </label>
-            </div>
-                <div className="form-check">
-                    <label className="form-check-label">
-                      <input type="checkbox"
-                        defaultChecked={this.state.is_shodan}
-                        onChange={this.on_change_shodan}
-                        className="form-check-input"
-                      />
-                      Shodan
-                    </label>
-            </div>
-
             <div className="form-check">
                 <label className="form-check-label">
                   <input type="checkbox"
@@ -255,7 +219,7 @@ on_change_google = () => {
                     onChange={this.on_change_pgp}
                     className="form-check-input"
                   />
-                  PGP (this may take some time)
+                  PGP (this engine may take some time)
                 </label>
             </div>
             <input type="submit" value="Submit" />
