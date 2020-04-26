@@ -1,4 +1,5 @@
 import time
+from joblib import Parallel, delayed
 from flask import Flask, request, jsonify, send_from_directory
 #
 from lib.check import *
@@ -18,6 +19,22 @@ from recon.shodan import *
 
 app = Flask(__name__)
 
+def get_engine_list(json,target):
+    engine_list = []
+    mapping = {'is_ask':Ask(target),
+               'is_baidu':Baidu(target),
+               'is_bing':Bing(target),
+               'is_dogpile':Dogpile(target),
+               'is_exalead':Exalead(target),
+               'is_google':Google(target),
+               'is_pgp':PGP(target),
+               'is_yahoo':Yahoo(target)
+                }
+    for key in json.keys():
+        if json[key] == True:
+            if key != 'domain':
+                engine_list.append(mapping[key])
+    return engine_list
 @app.route('/api/time')
 def get_current_time():
     return {'time': time.time()}
@@ -30,9 +47,6 @@ def result():
        return {'count': calculate(json['first'],json['last'])}
     return "No information is given"
 
-def calculate(first,last):
-    return len(first)+len(last)
-
 @app.route('/api/get_mail', methods = ['POST'])
 def get_email():
     spaces = lambda x: ' '*x
@@ -44,16 +58,17 @@ def get_email():
     listEmail = []
     report = None
     verbose = 1
+    start =time.time()
+    engine_list = get_engine_list(json,domain)
     if domain != ('' or None):
-	    listEmail = engine(domain,'all')
-	
-    print(json)
+	    listEmail = engine(engine_list)
+    print(f"engine complete in {time.time()-start}")
     if json:
         #return {'count': calculate(json['first'],json['last'])}
-        #TODO 
+        #TODO
         if listEmail == [] or listEmail == None:
             return {'status': 'No Emails Found.'}
-		
+
         for email in listEmail:
             eres = {}
             ip = tester(email)
@@ -61,7 +76,7 @@ def get_email():
                 ips = []
                 for i in ip:
                     if i not in ips:ips.append(i)
-                
+
                 ####Shodan
                 #semail = 'Email: %s (%s)'%(email,', '.join([x for x in ips]))
                 #plus(semail)
@@ -78,7 +93,7 @@ def get_email():
                 #        if shodanData.has_key('city') and shodanData.has_key('region_code'):
                 #            headers += '%s- City: %s (%s)'%(spaces(1),shodanData.get('city'),shodanData.get('region_code'))
                 #        eres['shodan'] = headers
-                #    else: 
+                #    else:
                 #        eres['shodan'] = ('No information found (on shodan) for this email, searching this ip/ips on internet..')
                 ###
                 ###pwn
@@ -93,7 +108,7 @@ def get_email():
                 #headers  = '%s>> This email was leaked... found %s results'%(spaces(1),len(pwndata['Breaches']))
                 #eres['pwn'] = (headers)
                 ##
-                
+
                 eres['ips']=ips
                 eres['email']=email
             else:
@@ -103,8 +118,8 @@ def get_email():
     else:
         return {'status': "No domain provided."}
     return res
-    
-    
+
+
 def search(module):
         emails = module.search()
         listEmail = []
@@ -117,14 +132,9 @@ def search(module):
 			#	info('Found %s emails in %s'%(len(emails),
 			#		module.__class__.__name__))
 
-def engine(target,engine):
-    engine_list = [ Ask(target),Baidu(target),Bing(target),Dogpile(target),
-                    Exalead(target),Google(target),PGP(target),Yahoo(target)
-                    ]
+def engine(engine_list):
     listEmail = []
-    if engine == 'all':
-        for e in engine_list:
-            listEmail.append(search(e))
+    listEmail.append(Parallel(n_jobs=2)(delayed(search)(e) for e in engine_list))
     return listEmail
     #else:
      #   for e in engine_list:
