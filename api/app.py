@@ -19,6 +19,24 @@ from recon.shodan import *
 
 app = Flask(__name__)
 
+def get_engine_list(json,target):
+    engine_list = []
+    mapping = {'is_ask':Ask(target),
+               'is_baidu':Baidu(target),
+               'is_bing':Bing(target),
+               'is_dogpile':Dogpile(target),
+               'is_exalead':Exalead(target),
+               'is_google':Google(target),
+               'is_pgp':PGP(target),
+               'is_shodan':Shodan(target),
+               'is_yahoo':Yahoo(target),
+               'is_pwned':Pwned(target)
+                }
+    for key in json.keys():
+        if json[key] == True:
+            if key != 'domain':
+                engine_list.append(mapping[key])
+    return engine_list
 @app.route('/api/time')
 def get_current_time():
     return {'time': time.time()}
@@ -30,9 +48,6 @@ def result():
     if json:
        return {'count': calculate(json['first'],json['last'])}
     return "No information is given"
-
-def calculate(first,last):
-    return len(first)+len(last)
 
 @app.route('/api/get_mail', methods = ['POST'])
 def get_email():
@@ -46,10 +61,10 @@ def get_email():
     report = None
     verbose = 1
     start =time.time()
+    engine_list = get_engine_list(json,domain)
     if domain != ('' or None):
-	    listEmail = engine(domain,'all')
+	    listEmail = engine(engine_list)
     print(f"engine complete in {time.time()-start}")
-    print(json)
     if json:
         #return {'count': calculate(json['first'],json['last'])}
         #TODO
@@ -119,13 +134,9 @@ def search(module):
 			#	info('Found %s emails in %s'%(len(emails),
 			#		module.__class__.__name__))
 
-def engine(target,engine):
-    engine_list = [ Ask(target),Baidu(target),Bing(target),Dogpile(target),
-                    Exalead(target),Google(target),PGP(target),Yahoo(target)
-                    ]
+def engine(engine_list):
     listEmail = []
-    if engine == 'all':
-        listEmail.append(Parallel(n_jobs=2)(delayed(search)(e) for e in engine_list))
+    listEmail.append(Parallel(n_jobs=2)(delayed(search)(e) for e in engine_list))
     return listEmail
     #else:
      #   for e in engine_list:

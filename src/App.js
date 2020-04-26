@@ -4,10 +4,10 @@ import './App.css';
 import { trackPromise } from 'react-promise-tracker';
 import { usePromiseTracker } from "react-promise-tracker";
 
-import Form from './componrnts/Form';
+import Form from './components/Form';
 
 function App() {
- 
+
   return (
     <div className="App">
       <header className="App-header">
