@@ -7,8 +7,10 @@ class Form extends Component {
   constructor(props) {
     super(props);
     this.state = {domain: ''};
-    this.state = {emails: ''}
+    this.state = {emails: []}
     this.state = {mail: []}
+    this.state = {isLoaded: false}
+    this.state = {isEmpty: true}
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -106,16 +108,24 @@ on_change_google = () => {
         }
       ).then(res => res.json())).then(data => {
         this.setState({
-          emails: data.emails
+          emails: data.emails,
+          isLoaded: true,
         });
         var mail = []
-        for (let i = 0; i < this.state.emails.length; i++) {
-          for (let j = 0; j < this.state.emails[i].email.length; j++) {
-            mail.push(this.state.emails[i].email[j])
+        if (this.state.emails !== undefined || this.state.emails.length != 0) {
+          for (let i = 0; i < this.state.emails.length; i++) {
+            for (let j = 0; j < this.state.emails[i].email.length; j++) {
+              for (let n = 0; n < this.state.emails[i].email[j].length; n++) {
+                mail.push(this.state.emails[i].email[j][n])
+              }
+            }
           }
+          this.setState({
+            mail: mail
+          });
         }
         this.setState({
-          mail: mail
+          isEmpty: mail.length==0
         });
       });
 
@@ -223,7 +233,13 @@ on_change_google = () => {
                 </label>
             </div>
             <input type="submit" value="Submit" />
-            <p>list of emails found: {this.state.mail}</p>
+            {this.state.isLoaded
+              ? this.state.isEmpty
+                ? <p>No Emails Found</p>
+                :  <p>list of Emails found: {this.state.mail}</p>
+                
+              :  <p></p>
+            }
             <LoadingIndicator/>
           </div>
         </form>
