@@ -81,7 +81,9 @@ on_change_google = () => {
   handleSubmit = async event => {
     event.preventDefault();
     console.log(this.state)
-
+    this.setState({
+      isLoaded: false
+    });
     const d = {
       domain: this.state.domain,
       is_ask: this.state.is_ask,
@@ -114,14 +116,14 @@ on_change_google = () => {
         var mail = []
         if (this.state.emails !== undefined || this.state.emails.length != 0) {
           for (let i = 0; i < this.state.emails.length; i++) {
-            for (let j = 0; j < this.state.emails[i].email.length; j++) {
-              for (let n = 0; n < this.state.emails[i].email[j].length; n++) {
-                var table_elements = {Email:this.state.emails[i].email[j][n],
-                  Pwned:'N/A',
-                  Shodan:'N/A'}
+    
+                var table_elements = {
+                  Email:this.state.emails[i].email,
+                  Pwned:this.state.emails[i].pwn
+                  }
                 mail.push(table_elements)
-              }
-            }
+              
+            
           }
           this.setState({
             mail: mail

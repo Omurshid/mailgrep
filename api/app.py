@@ -54,6 +54,7 @@ def get_email():
     res = {}
     res['emails'] = []
     json = request.json
+    print(json)
     domain = json['domain']
     listEmail = []
     report = None
@@ -68,53 +69,47 @@ def get_email():
         #TODO
         if listEmail == [] or listEmail == None:
             return {'status': 'No Emails Found.'}
-
-        for email in listEmail:
-            eres = {}
-            ip = tester(email)
-            if ip != ([] or None):
-                ips = []
-                for i in ip:
-                    if i not in ips:ips.append(i)
-
-                ####Shodan
+        #print(listEmail)
+        for elist in listEmail:
+            for email in elist:
+                eres = {}
+                #ip = tester(email)
+                #if ip != ([] or None):
+                    
+                    ####Shodan
                 #semail = 'Email: %s (%s)'%(email,', '.join([x for x in ips]))
-                #plus(semail)
-                #if ips != []:
-                #    shodanData = json.loads(Shodan(ips[0]).search())
-                #    if shodanData == {}:
-                #        shodanData = None
-                #    if shodanData != None:
-                #        headers = ''
-                #        if shodanData.has_key('hostnames'):
-                #            headers += '%s- Hostname: %s\n'%(spaces(1),shodanData.get('hostnames')[0])
-                #        if shodanData.has_key('country_code') and shodanData.has_key('country_name'):
-                #            headers += '%s- Country: %s (%s)\n'%(spaces(1),shodanData.get('country_code'),shodanData.get('country_name'))
-                #        if shodanData.has_key('city') and shodanData.has_key('region_code'):
-                #            headers += '%s- City: %s (%s)'%(spaces(1),shodanData.get('city'),shodanData.get('region_code'))
-                #        eres['shodan'] = headers
-                #    else:
-                #        eres['shodan'] = ('No information found (on shodan) for this email, searching this ip/ips on internet..')
-                ###
+                    #plus(semail)
+                    #if ips != []:
+                    #    shodanData = json.loads(Shodan(ips[0]).search())
+                    #    if shodanData == {}:
+                    #        shodanData = None
+                    #    if shodanData != None:
+                    #        headers = ''
+                    #        if shodanData.has_key('hostnames'):
+                    #            headers += '%s- Hostname: %s\n'%(spaces(1),shodanData.get('hostnames')[0])
+                    #        if shodanData.has_key('country_code') and shodanData.has_key('country_name'):
+                    #            headers += '%s- Country: %s (%s)\n'%(spaces(1),shodanData.get('country_code'),shodanData.get('country_name'))
+                    #        if shodanData.has_key('city') and shodanData.has_key('region_code'):
+                    #            headers += '%s- City: %s (%s)'%(spaces(1),shodanData.get('city'),shodanData.get('region_code'))
+                    #        eres['shodan'] = headers
+                    #    else:
+                    #        eres['shodan'] = ('No information found (on shodan) for this email, searching this ip/ips on internet..')
+                    ###
                 ###pwn
-                #pwndata = Pwned(semail).search()
-                #if pwndata is None:
-                #    print('%s>> This email wasn\'t leaked'%spaces(1))
-                #    eres['pwn'] = ('%s>> This email wasn\'t leaked\n'%spaces(1))
-                #elif pwndata.has_key('Breaches'):
-                #    if pwndata.get('Breaches') is None and pwndata.has_key('Breaches'):
-                #        pwndata.pop('Breaches')
-                #        pwndata['Breaches'] = pwndata.pop('Pastes')
-                #headers  = '%s>> This email was leaked... found %s results'%(spaces(1),len(pwndata['Breaches']))
-                #eres['pwn'] = (headers)
+                pwndata = Pwned(email).search()
+                if pwndata is None:
+                    eres['pwn'] = ('%sThis email wasn\'t leaked\n'%spaces(1))
+                elif pwndata['Breaches']:
+                    headers  = '%sThis email was leaked... found %s results'%(spaces(1),len(pwndata['Breaches']))
+                    eres['pwn'] = (headers)
                 ##
 
-                eres['ips']=ips
+                #eres['ip']=ip
                 eres['email']=email
-            else:
-                eres['info'] = ('No info found for %s'%(email))
-            print(eres)
-            res['emails'].append(eres)
+                #else:
+                    #eres['info'] = ('No info found for %s'%(email))
+                #print(eres)
+                res['emails'].append(eres)
     else:
         return {'status': "No domain provided."}
     return res
@@ -134,7 +129,8 @@ def search(module):
 
 def engine(engine_list):
     listEmail = []
-    listEmail.append(Parallel(n_jobs=2)(delayed(search)(e) for e in engine_list))
+    listEmail = (Parallel(n_jobs=2)(delayed(search)(e) for e in engine_list))
+    print(listEmail)
     return listEmail
     #else:
      #   for e in engine_list:
