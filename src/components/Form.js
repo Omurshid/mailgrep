@@ -8,7 +8,7 @@ class Form extends Component {
     super(props);
     this.state = {domain: ''};
     this.state = {emails: []}
-    this.state = {mail: []}
+    this.state = {mail: [{}]}
     this.state = {isLoaded: false}
     this.state = {isEmpty: true}
     this.handleChange = this.handleChange.bind(this);
@@ -116,7 +116,10 @@ on_change_google = () => {
           for (let i = 0; i < this.state.emails.length; i++) {
             for (let j = 0; j < this.state.emails[i].email.length; j++) {
               for (let n = 0; n < this.state.emails[i].email[j].length; n++) {
-                mail.push(this.state.emails[i].email[j][n])
+                var table_elements = {Email:this.state.emails[i].email[j][n],
+                  Pwned:'N/A',
+                  Shodan:'N/A'}
+                mail.push(table_elements)
               }
             }
           }
@@ -128,11 +131,20 @@ on_change_google = () => {
           isEmpty: mail.length==0
         });
       });
-
-
   }
 
-
+  renderTableData() {
+   return this.state.mail.map((row, index) => {
+      const { Email, Shodan, Pwned } = row //destructuring
+      return (
+         <tr key={Email}>
+         <td>{Email}</td>
+            <td>{Shodan}</td>
+            <td>{Pwned}</td>
+         </tr>
+      )
+   })
+}
 
     render(){
       const LoadingIndicator = props => {
@@ -236,8 +248,17 @@ on_change_google = () => {
             {this.state.isLoaded
               ? this.state.isEmpty
                 ? <p>No Emails Found</p>
-                :  <p>list of Emails found: {this.state.mail}</p>
-                
+                :
+
+                <p><div>
+                     <h3 id='title'>List of Emails found</h3>
+                     <table id='students'>
+                        <tbody>
+                           {this.renderTableData()}
+                        </tbody>
+                     </table>
+                  </div></p>
+
               :  <p></p>
             }
             <LoadingIndicator/>
