@@ -2,6 +2,7 @@ import React, { Component, useEffect }  from 'react';
 import { trackPromise } from 'react-promise-tracker';
 import { usePromiseTracker } from "react-promise-tracker";
 import Loader from 'react-loader-spinner';
+import '../App.css';
 
 class Form extends Component {
   constructor(props) {
@@ -87,6 +88,7 @@ on_change_google = () => {
       domain: this.state.domain,
       is_ask: this.state.is_ask,
       is_bing: this.state.is_bing,
+      is_pwned: this.state.is_pwned,
       is_pgp: this.state.is_pgp,
       is_yahoo: this.state.is_yahoo,
       is_baidu: this.state.is_baidu,
@@ -156,7 +158,8 @@ on_change_google = () => {
           <div>
             <label>Domain</label>
             <input type='text' value={this.state.domain} onChange={this.handleChange} />
-            <div className="form-check">
+
+            <div class="container">
               <label className="form-check-label">
                 <input type="checkbox"
                   defaultChecked={this.state.is_ask}
@@ -165,9 +168,7 @@ on_change_google = () => {
                 />
                 Ask
               </label>
-            </div>
 
-            <div className="form-check">
               <label className="form-check-label">
                 <input type="checkbox"
                   defaultChecked={this.state.is_baidu}
@@ -176,9 +177,7 @@ on_change_google = () => {
                 />
                 Baidu
               </label>
-            </div>
 
-            <div className="form-check">
               <label className="form-check-label">
                 <input type="checkbox"
                   defaultChecked={this.state.is_bing}
@@ -187,9 +186,7 @@ on_change_google = () => {
                 />
                 Bing
               </label>
-            </div>
 
-            <div className="form-check">
               <label className="form-check-label">
                 <input type="checkbox"
                   defaultChecked={this.state.is_dogpile}
@@ -198,9 +195,7 @@ on_change_google = () => {
                 />
                 Dogpile
               </label>
-            </div>
 
-            <div className="form-check">
               <label className="form-check-label">
                 <input type="checkbox"
                   defaultChecked={this.state.is_exalead}
@@ -209,8 +204,6 @@ on_change_google = () => {
                 />
                 Exalead
               </label>
-            </div>
-            <div className="form-check">
                 <label className="form-check-label">
                   <input type="checkbox"
                     defaultChecked={this.state.is_google}
@@ -219,9 +212,6 @@ on_change_google = () => {
                   />
                   Google
                 </label>
-            </div>
-
-            <div className="form-check">
                 <label className="form-check-label">
                   <input type="checkbox"
                     defaultChecked={this.state.is_yahoo}
@@ -230,9 +220,6 @@ on_change_google = () => {
                   />
                   Yahoo
                 </label>
-            </div>
-
-            <div className="form-check">
                 <label className="form-check-label">
                   <input type="checkbox"
                     defaultChecked={this.state.is_pgp}
@@ -241,28 +228,33 @@ on_change_google = () => {
                   />
                   PGP (this engine may take some time)
                 </label>
-            </div>
+                </div>
+
             <input type="submit" value="Submit" />
+            <center>
             {this.state.isLoaded
               ? this.state.isEmpty
                 ? <p>No Emails Found</p>
                 :
+                <p>
 
-                <p><div>
                      <h3 id='title'>List of Emails found</h3>
+                    <div  className="divScroll">
                      <table id='emails'>
                                           <tr>
-  <th>Email</th>
-  <th>Pwned?</th>
+  <th >Email</th>
+  <th >Pwned?</th>
 </tr>
                         <tbody>
                            {this.renderTableData()}
                         </tbody>
                      </table>
+
                   </div></p>
 
               :  <p></p>
             }
+            </center>
             <LoadingIndicator/>
           </div>
         </form>
