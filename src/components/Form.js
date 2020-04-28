@@ -6,24 +6,23 @@ import Loader from 'react-loader-spinner';
 class Form extends Component {
   constructor(props) {
     super(props);
-    this.state = {domain: ''};
-    this.state = {emails: []}
-    this.state = {mail: [{}]}
-    this.state = {isLoaded: false}
-    this.state = {isEmpty: true}
+    this.state = {domain: '',
+                  emails:[],
+                  mail:[{}],
+                  isLoaded:false,
+                  isEmpty:true,
+                  is_ask: true,
+                  is_baidu:true,
+                  is_bing: true,
+                  is_dogpile:true,
+                  is_exalead:true,
+                  is_google:true,
+                  is_yahoo:true,
+                  is_php:false
+                }
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
-  state = {
-    is_ask: false,
-    is_baidu: false,
-    is_bing: false,
-    is_dogpile: false,
-    is_exalead: false,
-    is_google: false,
-    is_pgp: false,
-    is_yahoo: false
-};
 on_change_ask = () => {
   this.setState(prevState => ({
     is_ask: !prevState.is_ask,
@@ -88,14 +87,12 @@ on_change_google = () => {
       domain: this.state.domain,
       is_ask: this.state.is_ask,
       is_bing: this.state.is_bing,
-      is_pwned: this.state.is_pwned,
       is_pgp: this.state.is_pgp,
       is_yahoo: this.state.is_yahoo,
       is_baidu: this.state.is_baidu,
       is_exalead: this.state.is_exalead,
       is_google: this.state.is_google,
       is_dogpile: this.state.is_dogpile,
-      is_shodan: this.state.is_shodan
     }
     var emails = this.state.emails
 
@@ -116,14 +113,14 @@ on_change_google = () => {
         var mail = []
         if (this.state.emails !== undefined || this.state.emails.length != 0) {
           for (let i = 0; i < this.state.emails.length; i++) {
-    
+
                 var table_elements = {
                   Email:this.state.emails[i].email,
                   Pwned:this.state.emails[i].pwn
                   }
                 mail.push(table_elements)
-              
-            
+
+
           }
           this.setState({
             mail: mail
@@ -137,11 +134,10 @@ on_change_google = () => {
 
   renderTableData() {
    return this.state.mail.map((row, index) => {
-      const { Email, Shodan, Pwned } = row //destructuring
+      const { Email,Pwned } = row //destructuring
       return (
          <tr key={Email}>
          <td>{Email}</td>
-            <td>{Shodan}</td>
             <td>{Pwned}</td>
          </tr>
       )
@@ -254,7 +250,11 @@ on_change_google = () => {
 
                 <p><div>
                      <h3 id='title'>List of Emails found</h3>
-                     <table id='students'>
+                     <table id='emails'>
+                                          <tr>
+  <th>Email</th>
+  <th>Pwned?</th>
+</tr>
                         <tbody>
                            {this.renderTableData()}
                         </tbody>
