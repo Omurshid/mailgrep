@@ -75,7 +75,7 @@ def get_email():
                 eres = {}
                 #ip = tester(email)
                 #if ip != ([] or None):
-                    
+
                     ####Shodan
                 #semail = 'Email: %s (%s)'%(email,', '.join([x for x in ips]))
                     #plus(semail)
@@ -97,11 +97,30 @@ def get_email():
                     ###
                 ###pwn
                 pwndata = Pwned(email).search()
+                try:
+                    for i in pwndata['Breaches']:
+                        print(f"{email}: Leak:{i['Name']} Description:{i['Description']}")
+
+                except Exception as e:
+                    print(e)
+                    pass
                 if pwndata is None:
                     eres['pwn'] = ('%sThis email wasn\'t leaked\n'%spaces(1))
                 elif pwndata['Breaches']:
                     headers  = '%sThis email was leaked... found %s results'%(spaces(1),len(pwndata['Breaches']))
                     eres['pwn'] = (headers)
+                    pwn_details_list = []
+                    pwn_details = {}
+                    try:
+                        for i in pwndata['Breaches']:
+                            pwn_details['Name'] = i['Name']
+                            pwn_details ['Description'] = i['Description']
+                            pwn_details_list.append(pwn_details)
+                        eres['pwn_details'] = pwn_details_list
+                    except Exception as e:
+                        print(e)
+                        pass
+
                 ##
 
                 #eres['ip']=ip
