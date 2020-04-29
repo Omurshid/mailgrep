@@ -3,7 +3,7 @@ import { trackPromise } from 'react-promise-tracker';
 import { usePromiseTracker } from "react-promise-tracker";
 import Loader from 'react-loader-spinner';
 import '../App.css';
-
+import glass from '../glass.PNG';
 class Form extends Component {
   constructor(props) {
     super(props);
@@ -150,7 +150,8 @@ on_change_google = () => {
       const LoadingIndicator = props => {
         const { promiseInProgress } = usePromiseTracker();
         return (promiseInProgress &&
-            <Loader type="ThreeDots" color="#2BAD60" height="100" width="100" />
+            // <Loader type="ThreeDots" color="#2BAD60" height="100" width="100" />
+            <img src={glass} className="App-logo"/>
         );
       }
       return(

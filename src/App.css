@@ -21,19 +21,17 @@ height:250px;
 width:1000px;
 }
 .logo{
-  position:absolute;
-  left:max;
-  padding-bottom:10px;
+  display: block;
+  width: auto;
+  height: auto;
+  padding-bottom:20px;
 }
-.App-logo {
-  position:relative;
-  pointer-events: none;
-}
-
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
-    padding-bottom: 50px;
-    animation: App-logo-spin infinite 3s linear;
+    position: fixed;
+    left:40%;
+    top:25%;
+    animation: App-logo-spin infinite 2.5s linear;
   }
 }
 
