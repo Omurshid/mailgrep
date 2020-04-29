@@ -2,8 +2,6 @@
   text-align: center;
 }
 
-
-
 table {
   text-align: left;
   position: relative;
@@ -28,16 +26,14 @@ width:1000px;
   padding-bottom:10px;
 }
 .App-logo {
-  top:0;
   position:relative;
   pointer-events: none;
-  padding-bottom:10px;
 }
 
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     padding-bottom: 50px;
-    animation: App-logo-spin infinite 5s linear;
+    animation: App-logo-spin infinite 3s linear;
   }
 }
 
@@ -57,10 +53,6 @@ width:1000px;
 }
 
 @keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+  from { -webkit-transform: rotate(0deg) translateX(40px) rotate(0deg); }
+  to   { -webkit-transform: rotate(360deg) translateX(40px) rotate(-360deg); }
 }
