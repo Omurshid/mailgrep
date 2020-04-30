@@ -97,13 +97,6 @@ def get_email():
                     ###
                 ###pwn
                 pwndata = Pwned(email).search()
-                try:
-                    for i in pwndata['Breaches']:
-                        print(f"{email}: Leak:{i['Name']} Description:{i['Description']}")
-
-                except Exception as e:
-                    print(e)
-                    pass
                 if pwndata is None:
                     eres['pwn'] = ('%sThis email wasn\'t leaked\n'%spaces(1))
                 elif pwndata['Breaches']:

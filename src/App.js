@@ -9,11 +9,11 @@ import Form from './components/Form';
 function App() {
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className ="logo"/>
+    <div>
+    <center>
+    <img src={logo} className="logo"/>
         <Form />
-      </header>
+        </center>
     </div>
   );
 }

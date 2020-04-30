@@ -157,10 +157,11 @@ on_change_google = () => {
       return(
         <form onSubmit={this.handleSubmit}>
           <div>
+          <div class = "element">
             <label>Domain</label>
             <input type='text' value={this.state.domain} onChange={this.handleChange} />
-
-            <div class="container">
+            </div>
+            <div class="checkboxes">
               <label className="form-check-label">
                 <input type="checkbox"
                   defaultChecked={this.state.is_ask}
@@ -227,11 +228,12 @@ on_change_google = () => {
                     onChange={this.on_change_pgp}
                     className="form-check-input"
                   />
-                  PGP (this engine may take some time)
+                  PGP
                 </label>
                 </div>
-
+            <div class = "element">
             <input type="submit" value="Submit" />
+            </div>
             <center>
             {this.state.isLoaded
               ? this.state.isEmpty
