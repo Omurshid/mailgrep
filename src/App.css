@@ -1,24 +1,51 @@
 .App {
   text-align: center;
 }
+.element{
+  padding:20px;
+}
+.checkboxes input{
+  margin: 0px 0px 0px 0px;
+ }
+
+ .checkboxes label{
+   margin: 0px 10px 0px 3px;
+ }
+
+/* .table_ {
+   font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+   border-collapse: collapse;
+   width: 100%;
+ } */
+
+td, th {
+   border: 1px solid #ddd;
+   padding: 8px;
+ }
+
+tr:nth-child(even){background-color: #f2f2f2;}
+
+tr:hover {background-color: #ddd;}
+
 
 table {
+  width:80%;
   text-align: left;
-  position: relative;
 }
 
 th {
-  width:500px;
-  color: White;
-  background-color: black;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #B3E8FF;
+  color: Grey;
   position: sticky;
   padding-bottom:10px;
   top: 0;
 }
 .divScroll {
 overflow-y:scroll;
-height:250px;
-width:1000px;
+height:200px;
 }
 .logo{
   display: block;
@@ -29,8 +56,8 @@ width:1000px;
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     position: fixed;
-    left:40%;
-    top:25%;
+    left:42%;
+    top:8%;
     animation: App-logo-spin infinite 2.5s linear;
   }
 }
