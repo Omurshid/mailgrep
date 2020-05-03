@@ -85,6 +85,8 @@ def get_email():
                     except Exception as e:
                         print(e)
                         pass
+                else:
+                    pwn_details_list.append('%sThis email wasn\'t leaked\n'%spaces(1))
                 eres['pwn_details'] = pwn_details_list
 
                 ##
