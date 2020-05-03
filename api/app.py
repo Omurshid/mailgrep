@@ -68,12 +68,11 @@ def get_email():
                 eres = {}
                 ###pwn
                 pwndata = Pwned(email).search()
+                pwn_details_list = []
+
                 if pwndata is None:
-                    eres['pwn'] = ('%sThis email wasn\'t leaked\n'%spaces(1))
+                    pwn_details_list.append('%sThis email wasn\'t leaked\n'%spaces(1))
                 elif pwndata['Breaches']:
-                    headers  = '%sThis email was leaked... found %s results'%(spaces(1),len(pwndata['Breaches']))
-                    eres['pwn'] = (headers)
-                    pwn_details_list = []
                     try:
                         length_of_data = len(pwndata['Breaches'])
                         count = 0
@@ -83,14 +82,10 @@ def get_email():
                                 pwn_details_list.append(i['Name'])
                             else:
                                 pwn_details_list.append(f"{i['Name']}, ")
-                            #
-                            # pwn_details_list.append("N/A")
-                        eres['pwn_details'] = pwn_details_list
                     except Exception as e:
                         print(e)
                         pass
-                else:
-                    eres['pwn'] = ('%sThis email wasn\'t leaked\n'%spaces(1))
+                eres['pwn_details'] = pwn_details_list
 
                 ##
                 eres['email']=email
