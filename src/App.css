@@ -46,6 +46,7 @@ th {
 .divScroll {
 overflow-y:scroll;
 height:200px;
+width:auto;
 }
 .logo{
   display: block;

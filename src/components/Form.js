@@ -44,7 +44,7 @@ on_change_bing = () => {
 
 on_change_dogpile = () => {
   this.setState(prevState => ({
-    is_dogpile: !prevState.is_dogpile,
+    is_dogpile: !prevState.is_dogpile,            // <Loader type="ThreeDots" color="#2BAD60" height="100" width="100" />
   }));
 }
 
@@ -118,7 +118,8 @@ on_change_google = () => {
 
                 var table_elements = {
                   Email:this.state.emails[i].email,
-                  Pwned:this.state.emails[i].pwn
+                  Pwned:this.state.emails[i].pwn,
+                  Pwn_Details:this.state.emails[i].pwn_details
                   }
                 mail.push(table_elements)
 
@@ -136,11 +137,12 @@ on_change_google = () => {
 
   renderTableData() {
    return this.state.mail.map((row, index) => {
-      const { Email,Pwned } = row //destructuring
+      const { Email,Pwned, Pwn_Details} = row //destructuring
       return (
          <tr key={Email}>
          <td>{Email}</td>
             <td>{Pwned}</td>
+            <td>{Pwn_Details}</td>
          </tr>
       )
    })
@@ -150,7 +152,6 @@ on_change_google = () => {
       const LoadingIndicator = props => {
         const { promiseInProgress } = usePromiseTracker();
         return (promiseInProgress &&
-            // <Loader type="ThreeDots" color="#2BAD60" height="100" width="100" />
             <img src={glass} className="App-logo"/>
         );
       }
@@ -247,6 +248,7 @@ on_change_google = () => {
                                           <tr>
   <th >Email</th>
   <th >Pwned?</th>
+  <th >Pwned On:</th>
 </tr>
                         <tbody>
                            {this.renderTableData()}
