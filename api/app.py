@@ -1,10 +1,6 @@
 import time
 from joblib import Parallel, delayed
 from flask import Flask, request, jsonify, send_from_directory
-#
-from lib.check import *
-from lib.output import *
-#
 from recon.ask import *
 from recon.baidu import *
 from recon.bing import *
@@ -15,7 +11,7 @@ from recon.exalead import *
 from recon.google import *
 from recon.mailtester import *
 from recon.pwned import *
-from recon.shodan import *
+from json import loads
 
 app = Flask(__name__)
 
@@ -65,36 +61,11 @@ def get_email():
 	    listEmail = engine(engine_list)
     print(f"engine complete in {time.time()-start}")
     if json:
-        #return {'count': calculate(json['first'],json['last'])}
-        #TODO
         if listEmail == [] or listEmail == None:
             return {'status': 'No Emails Found.'}
-        #print(listEmail)
         for elist in listEmail:
             for email in elist:
                 eres = {}
-                #ip = tester(email)
-                #if ip != ([] or None):
-
-                    ####Shodan
-                #semail = 'Email: %s (%s)'%(email,', '.join([x for x in ips]))
-                    #plus(semail)
-                    #if ips != []:
-                    #    shodanData = json.loads(Shodan(ips[0]).search())
-                    #    if shodanData == {}:
-                    #        shodanData = None
-                    #    if shodanData != None:
-                    #        headers = ''
-                    #        if shodanData.has_key('hostnames'):
-                    #            headers += '%s- Hostname: %s\n'%(spaces(1),shodanData.get('hostnames')[0])
-                    #        if shodanData.has_key('country_code') and shodanData.has_key('country_name'):
-                    #            headers += '%s- Country: %s (%s)\n'%(spaces(1),shodanData.get('country_code'),shodanData.get('country_name'))
-                    #        if shodanData.has_key('city') and shodanData.has_key('region_code'):
-                    #            headers += '%s- City: %s (%s)'%(spaces(1),shodanData.get('city'),shodanData.get('region_code'))
-                    #        eres['shodan'] = headers
-                    #    else:
-                    #        eres['shodan'] = ('No information found (on shodan) for this email, searching this ip/ips on internet..')
-                    ###
                 ###pwn
                 pwndata = Pwned(email).search()
                 if pwndata is None:
@@ -118,14 +89,11 @@ def get_email():
                     except Exception as e:
                         print(e)
                         pass
+                else:
+                    eres['pwn'] = ('%sThis email wasn\'t leaked\n'%spaces(1))
 
                 ##
-
-                #eres['ip']=ip
                 eres['email']=email
-                #else:
-                    #eres['info'] = ('No info found for %s'%(email))
-                #print(eres)
                 res['emails'].append(eres)
     else:
         return {'status': "No domain provided."}
@@ -140,18 +108,12 @@ def search(module):
                 if email not in listEmail:
                     listEmail.append(email)
         return(listEmail)
-			#if self.verbose in (1,2,3):
-			#	info('Found %s emails in %s'%(len(emails),
-			#		module.__class__.__name__))
 
 def engine(engine_list):
     listEmail = []
     listEmail = (Parallel(n_jobs=2)(delayed(search)(e) for e in engine_list))
     print(listEmail)
     return listEmail
-    #else:
-     #   for e in engine_list:
-      #      if e.__class__.__name__.lower() in engine:self.search(e)
 
 def tester(email):
     return MailTester(email).search()
