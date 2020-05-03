@@ -88,7 +88,6 @@ on_change_google = () => {
       domain: this.state.domain,
       is_ask: this.state.is_ask,
       is_bing: this.state.is_bing,
-      is_pwned: this.state.is_pwned,
       is_pgp: this.state.is_pgp,
       is_yahoo: this.state.is_yahoo,
       is_baidu: this.state.is_baidu,
@@ -118,7 +117,6 @@ on_change_google = () => {
 
                 var table_elements = {
                   Email:this.state.emails[i].email,
-                  Pwned:this.state.emails[i].pwn,
                   Pwn_Details:this.state.emails[i].pwn_details
                   }
                 mail.push(table_elements)
@@ -137,11 +135,10 @@ on_change_google = () => {
 
   renderTableData() {
    return this.state.mail.map((row, index) => {
-      const { Email,Pwned, Pwn_Details} = row //destructuring
+      const { Email,Pwn_Details} = row //destructuring
       return (
          <tr key={Email}>
          <td>{Email}</td>
-            <td>{Pwned}</td>
             <td>{Pwn_Details}</td>
          </tr>
       )
@@ -247,8 +244,7 @@ on_change_google = () => {
                      <table id='emails'>
                                           <tr>
   <th >Email</th>
-  <th >Pwned?</th>
-  <th >Pwned On:</th>
+  <th >Pwned On</th>
 </tr>
                         <tbody>
                            {this.renderTableData()}
