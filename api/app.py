@@ -31,6 +31,7 @@ def get_engine_list(json,target):
             if key != 'domain':
                 engine_list.append(mapping[key])
     return engine_list
+
 @app.route('/api/time')
 def get_current_time():
     return {'time': time.time()}
@@ -69,25 +70,27 @@ def get_email():
                 ###pwn
                 pwndata = Pwned(email).search()
                 pwn_details_list = []
-
+                count = 0
                 if pwndata is None:
                     pwn_details_list.append('%sThis email wasn\'t leaked\n'%spaces(1))
                 elif pwndata['Breaches']:
+
                     try:
-                        length_of_data = len(pwndata['Breaches'])
                         count = 0
+                        length_of_data = len(pwndata['Breaches'])
                         for i in pwndata['Breaches']:
                             count+=1
-                            if count == length_of_data:
-                                pwn_details_list.append(i['Name'])
+                            if count == 1:
+                                pwn_details_list.append(f"{i['Name']}")
                             else:
-                                pwn_details_list.append(f"{i['Name']}, ")
+                                pwn_details_list.append(f" {i['Name']}")
                     except Exception as e:
                         print(e)
                         pass
                 else:
                     pwn_details_list.append('%sThis email wasn\'t leaked\n'%spaces(1))
                 eres['pwn_details'] = pwn_details_list
+                eres['pwn_length'] = count
 
                 ##
                 eres['email']=email
