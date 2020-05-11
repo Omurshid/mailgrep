@@ -117,7 +117,8 @@ on_change_google = () => {
 
                 var table_elements = {
                   Email:this.state.emails[i].email,
-                  Pwn_Details:this.state.emails[i].pwn_details
+                  Pwn_Details:this.state.emails[i].pwn_details,
+                  Pwn_Length:this.state.emails[i].pwn_length
                   }
                 mail.push(table_elements)
 
@@ -135,11 +136,11 @@ on_change_google = () => {
 
   renderTableData() {
    return this.state.mail.map((row, index) => {
-      const { Email,Pwn_Details} = row //destructuring
+      const { Email,Pwn_Length,Pwn_Details} = row //destructuring
       return (
          <tr key={Email}>
          <td>{Email}</td>
-            <td>{Pwn_Details}</td>
+          <td title = {Pwn_Details}>Pwned on {Pwn_Length} sites</td>
          </tr>
       )
    })
@@ -157,11 +158,11 @@ on_change_google = () => {
           <div>
           <div class = "element">
             <label>Domain</label>
-            <input type='text' value={this.state.domain} onChange={this.handleChange} />
+            <input title= "Enter domain to search for leaks/breaches" type='text' value={this.state.domain} onChange={this.handleChange} />
             </div>
             <div class="checkboxes">
               <label className="form-check-label">
-                <input type="checkbox"
+                <input title= "Search Ask" type="checkbox"
                   defaultChecked={this.state.is_ask}
                   onChange={this.on_change_ask}
                   className="form-check-input"
@@ -170,7 +171,7 @@ on_change_google = () => {
               </label>
 
               <label className="form-check-label">
-                <input type="checkbox"
+                <input title= "Search Baidu" type="checkbox"
                   defaultChecked={this.state.is_baidu}
                   onChange={this.on_change_baidu}
                   className="form-check-input"
@@ -179,7 +180,7 @@ on_change_google = () => {
               </label>
 
               <label className="form-check-label">
-                <input type="checkbox"
+                <input title= "Search Bing" type="checkbox"
                   defaultChecked={this.state.is_bing}
                   onChange={this.on_change_bing}
                   className="form-check-input"
@@ -188,7 +189,7 @@ on_change_google = () => {
               </label>
 
               <label className="form-check-label">
-                <input type="checkbox"
+                <input title= "Search Dogpile" type="checkbox"
                   defaultChecked={this.state.is_dogpile}
                   onChange={this.on_change_dogpile}
                   className="form-check-input"
@@ -197,7 +198,7 @@ on_change_google = () => {
               </label>
 
               <label className="form-check-label">
-                <input type="checkbox"
+                <input title= "Search Exalead" type="checkbox"
                   defaultChecked={this.state.is_exalead}
                   onChange={this.on_change_exalead}
                   className="form-check-input"
@@ -205,7 +206,7 @@ on_change_google = () => {
                 Exalead
               </label>
                 <label className="form-check-label">
-                  <input type="checkbox"
+                  <input title= "Search Google" type="checkbox"
                     defaultChecked={this.state.is_google}
                     onChange={this.on_change_google}
                     className="form-check-input"
@@ -213,15 +214,16 @@ on_change_google = () => {
                   Google
                 </label>
                 <label className="form-check-label">
-                  <input type="checkbox"
+                  <input title= "Search Yahoo" type="checkbox"
                     defaultChecked={this.state.is_yahoo}
                     onChange={this.on_change_yahoo}
                     className="form-check-input"
                   />
                   Yahoo
                 </label>
+
                 <label className="form-check-label">
-                  <input type="checkbox"
+                  <input title="Search PGP (disabled by default due to long runtime)" type="checkbox"
                     defaultChecked={this.state.is_pgp}
                     onChange={this.on_change_pgp}
                     className="form-check-input"
@@ -230,7 +232,7 @@ on_change_google = () => {
                 </label>
                 </div>
             <div class = "element">
-            <input type="submit" value="Submit" />
+            <button type="submit">Search</button>
             </div>
             <center>
             {this.state.isLoaded
@@ -239,12 +241,12 @@ on_change_google = () => {
                 :
                 <p>
 
-                     <h3 id='title'>List of Emails found</h3>
+                     <h3 id='title'>List of Emails found (hover for PWNED details)</h3>
                     <div  className="divScroll">
                      <table id='emails'>
                                           <tr>
-  <th >Email</th>
-  <th >Pwned On</th>
+  <th>Email</th>
+  <th>Pwned?</th>
 </tr>
                         <tbody>
                            {this.renderTableData()}
