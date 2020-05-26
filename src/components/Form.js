@@ -1,7 +1,6 @@
 import React, { Component, useEffect }  from 'react';
 import { trackPromise } from 'react-promise-tracker';
 import { usePromiseTracker } from "react-promise-tracker";
-import Loader from 'react-loader-spinner';
 import '../App.css';
 import glass from '../glass.PNG';
 class Form extends Component {
@@ -95,10 +94,7 @@ on_change_google = () => {
       is_google: this.state.is_google,
       is_dogpile: this.state.is_dogpile,
     }
-    var emails = this.state.emails
-
-
-      trackPromise(fetch('/api/get_mail', {
+      trackPromise(fetch('http://localhost:5000/api/get_mail', {
         method:"POST",
         cache: "no-cache",
         headers:{
