@@ -15,35 +15,6 @@ from json import loads
 
 app = Flask(__name__)
 
-def get_engine_list(json,target):
-    engine_list = []
-    mapping = {'is_ask':Ask(target),
-               'is_baidu':Baidu(target),
-               'is_bing':Bing(target),
-               'is_dogpile':Dogpile(target),
-               'is_exalead':Exalead(target),
-               'is_google':Google(target),
-               'is_pgp':PGP(target),
-               'is_yahoo':Yahoo(target)
-                }
-    for key in json.keys():
-        if json[key] == True:
-            if key != 'domain':
-                engine_list.append(mapping[key])
-    return engine_list
-
-@app.route('/api/time')
-def get_current_time():
-    return {'time': time.time()}
-
-@app.route('/api/get_count', methods = ['POST'])
-def result():
-    json = request.json
-    print(request)
-    if json:
-       return {'count': calculate(json['first'],json['last'])}
-    return "No information is given"
-
 @app.route('/api/get_mail', methods = ['POST'])
 def get_email():
     spaces = lambda x: ' '*x
@@ -51,7 +22,6 @@ def get_email():
     res = {}
     res['emails'] = []
     json = request.json
-    print(json)
     domain = json['domain']
     listEmail = []
     report = None
@@ -60,7 +30,6 @@ def get_email():
     engine_list = get_engine_list(json,domain)
     if domain != ('' or None):
 	    listEmail = engine(engine_list)
-    print(f"engine complete in {time.time()-start}")
     if json:
         if listEmail == [] or listEmail == None:
             return {'status': 'No Emails Found.'}
@@ -99,6 +68,22 @@ def get_email():
         return {'status': "No domain provided."}
     return res
 
+def get_engine_list(json,target):
+    engine_list = []
+    mapping = {'is_ask':Ask(target),
+               'is_baidu':Baidu(target),
+               'is_bing':Bing(target),
+               'is_dogpile':Dogpile(target),
+               'is_exalead':Exalead(target),
+               'is_google':Google(target),
+               'is_pgp':PGP(target),
+               'is_yahoo':Yahoo(target)
+                }
+    for key in json.keys():
+        if json[key] == True:
+            if key != 'domain':
+                engine_list.append(mapping[key])
+    return engine_list
 
 def search(module):
         emails = module.search()
@@ -112,7 +97,6 @@ def search(module):
 def engine(engine_list):
     listEmail = []
     listEmail = (Parallel(n_jobs=2)(delayed(search)(e) for e in engine_list))
-    print(listEmail)
     return listEmail
 
 def tester(email):
