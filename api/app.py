@@ -43,16 +43,15 @@ def get_email():
                 if pwndata is None:
                     pwn_details_list.append('%sThis email wasn\'t leaked\n'%spaces(1))
                 elif pwndata['Breaches']:
-
                     try:
                         count = 0
                         length_of_data = len(pwndata['Breaches'])
                         for i in pwndata['Breaches']:
                             count+=1
                             if count == 1:
-                                pwn_details_list.append(f"{i['Name']}")
+                                pwn_details_list.append(str(i['Name']))
                             else:
-                                pwn_details_list.append(f" {i['Name']}")
+                                pwn_details_list.append(str(i['Name']))
                     except Exception as e:
                         print(e)
                         pass
